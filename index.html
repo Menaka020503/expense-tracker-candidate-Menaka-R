@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <p class="kicker">Personal Finance</p>
+      <h1 class="wordmark">Expense Tracker</h1>
+      <p class="tagline">Every entry, logged and balanced — income and expenses in one ledger.</p>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section class="ledger-summary" aria-label="Financial summary">
+      <div class="ledger-tile">
+        <span class="tile-label">Income</span>
+        <span class="tile-value mono" id="totalIncome">₹0.00</span>
+      </div>
+      <div class="ledger-tile is-expense">
+        <span class="tile-label">Expenses</span>
+        <span class="tile-value mono" id="totalExpense">₹0.00</span>
+      </div>
+      <div class="ledger-tile is-balance">
+        <span class="tile-label">Balance</span>
+        <span class="tile-value mono" id="totalBalance">₹0.00</span>
+      </div>
+    </section>
+
+    <section class="month-strip" aria-label="Monthly summary">
+      <span class="month-label">This month &mdash; <strong id="currentMonthLabel"></strong></span>
+      <span class="month-figures">
+        <span class="month-figure">Income <span class="mono" id="monthIncome">₹0.00</span></span>
+        <span class="month-figure">Expenses <span class="mono" id="monthExpense">₹0.00</span></span>
+        <span class="month-figure">Balance <span class="mono" id="monthBalance">₹0.00</span></span>
+      </span>
+    </section>
+
+    <div class="content-grid">
+      <section class="card entry-card" aria-label="Add or edit transaction">
+        <p class="card-kicker">New Entry</p>
+        <h2 id="formTitle">Add Transaction</h2>
+        <form id="transactionForm" novalidate>
+          <div class="type-toggle" role="radiogroup" aria-label="Transaction type">
+            <input type="radio" name="type" id="typeExpense" value="expense" checked>
+            <label for="typeExpense" class="toggle-tab">Expense</label>
+            <input type="radio" name="type" id="typeIncome" value="income">
+            <label for="typeIncome" class="toggle-tab">Income</label>
+          </div>
+
+          <div class="form-group">
+            <label for="amount">Amount</label>
+            <div class="amount-field">
+              <span class="amount-prefix">&#8377;</span>
+              <input type="number" id="amount" name="amount" step="0.01" min="0" placeholder="0.00" inputmode="decimal">
+            </div>
+            <span class="error-msg" id="amountError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" name="category">
+              <option value="">Select category</option>
+            </select>
+            <span class="error-msg" id="categoryError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="date">Date</label>
+            <input type="date" id="date" name="date">
+            <span class="error-msg" id="dateError"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" id="description" name="description" placeholder="e.g. Dinner with friends" maxlength="100">
+            <span class="error-msg" id="descriptionError"></span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="submitBtn" class="btn btn-primary">Add Transaction</button>
+            <button type="button" id="cancelEditBtn" class="btn btn-secondary" hidden>Cancel</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card ledger-card" aria-label="Transactions">
+        <div class="ledger-card-header">
+          <div>
+            <p class="card-kicker">The Book</p>
+            <h2>Transactions</h2>
+          </div>
+          <div class="filters">
+            <div class="filter-group" role="group" aria-label="Filter by type">
+              <button type="button" class="filter-tab active" data-type="all">All</button>
+              <button type="button" class="filter-tab" data-type="income">Income</button>
+              <button type="button" class="filter-tab" data-type="expense">Expense</button>
+            </div>
+            <select id="categoryFilter" aria-label="Filter by category">
+              <option value="all">All Categories</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="ledger-table">
+          <div class="ledger-row ledger-row--head" aria-hidden="true">
+            <span class="col-no">No.</span>
+            <span class="col-details">Details</span>
+            <span class="col-amount">Amount</span>
+            <span class="col-actions"></span>
+          </div>
+          <ul class="transaction-list" id="transactionList"></ul>
+        </div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <p>No entries yet. Add your first transaction above.</p>
+        </div>
+      </section>
+    </div>
+
+    <section class="card chart-card" aria-label="Category-wise expenses">
+      <p class="card-kicker">Breakdown</p>
+      <h2>Spending by Category</h2>
+      <div class="category-chart" id="categoryChart"></div>
+      <div class="empty-state" id="chartEmptyState" hidden>
+        <p>Add an expense to see the category breakdown.</p>
+      </div>
+    </section>
+  </main>
+
+
+  <script src="js/categories.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/render.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
